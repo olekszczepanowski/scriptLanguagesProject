@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista tasków</title>
+</head>
+<body>
+{% if request.user.is_authenticated %}
+    <p>{{ request.user }}</p>
+    <form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">logout</button>
+</form>
+{% else %}
+    <a href="{% url 'login' %}">Login</a>
+{% endif %}
+<h1>My to do list</h1>
+<div><a href="{% url 'task-create' %}">Add task</a></div>
+<ul>
+    {% for task in tasks%}
+    <li><div>{{ task.title }}</div>
+    <a href="{% url 'task' task.id %}">See details</a>
+    <a href="{% url 'task-update' task.id %}">Edit</a>
+    <a href="{% url 'task-delete' task.id %}">Delete</a>
+    </li>
+    {% empty %}
+        <h3>Add your first task!</h3>
+    {% endfor %}
+</ul>
+</body>
+</html>
