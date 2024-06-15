@@ -1,31 +1,174 @@
+{% extends 'todolist/index.html'%}
+{% load  todolist_extras %}
+{% load static %}
+{% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Lista tasków</title>
+    <title>To do list</title>
+    <style>
+        .header{
+            display: flex;
+            justify-content: space-between;
+            background: #7F7FD5;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+            padding: 2%;
+        }
+        #logout-btn{
+            background: none;
+            border: none;
+            padding: 1%
+        }
+        #logout-btn:hover{
+            cursor: pointer;
+            color: red;
+
+        }
+        a{
+            text-decoration: none;
+            color:black;
+        }
+        a:visited{
+            text-decoration: none;
+            color: black;
+        }
+        #task-container{
+            padding-bottom: 10px;
+        }
+        .task-item{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2%;
+            background-color: #cccaca;
+            margin: 10px;
+            border-radius: 25px;
+        }
+        .task-complete-icon{
+            height: 25px;
+            width: 25px;
+            border-radius:50%;
+            background-color: green;
+        }
+        .task-incomplete-icon{
+            height: 25px;
+            width: 25px;
+            border-radius:50%;
+            background-color: grey;
+        }
+        .task-title{
+            display: flex;
+            align-items: center;
+        }
+        .task-complete-icon, .task-incomplete-icon{
+            margin-right: 3px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #add-task{
+            display: flex;
+            justify-content: center;
+            font-size: 22px;
+        }
+        #add-task a:hover{
+            cursor: pointer;
+            transform: scale(1.1);
+            transition-duration: 0.1s;
+        }
+        .task-technology-icon{
+            margin-right: 5px;
+            font-size: 25px;
+        }
+        .task-completion-time{
+            padding: 5px;
+        }
+        .task-delete{
+            padding: 5px;
+        }
+
+    </style>
+    <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
 </head>
 <body>
-{% if request.user.is_authenticated %}
-    <p>{{ request.user }}</p>
+<div class="header">
+    <div>
+        <h1>Welcome {{ request.user|title }}!</h1>
+        <h3>You have {{ count }} incomplete task{{ count|pluralize }}</h3>
+    </div>
+    <div>
+    {% if request.user.is_authenticated %}
     <form method="post" action="{% url 'logout' %}">
     {% csrf_token %}
-    <button type="submit">logout</button>
-</form>
-{% else %}
+    <button type="submit" id="logout-btn">Logout</button>
+    </form>
+    </div>
+    {% else %}
     <a href="{% url 'login' %}">Login</a>
-{% endif %}
-<h1>My to do list</h1>
-<div><a href="{% url 'task-create' %}">Add task</a></div>
-<ul>
-    {% for task in tasks%}
-    <li><div>{{ task.title }}</div>
-    <a href="{% url 'task' task.id %}">See details</a>
-    <a href="{% url 'task-update' task.id %}">Edit</a>
-    <a href="{% url 'task-delete' task.id %}">Delete</a>
-    </li>
+    {% endif %}
+</div>
+<div id="add-task">
+    <a href="{% url 'task-create' %}">Add your task!</a>
+</div>
+<div style="display: flex; justify-content: center;">Click on task to see the detailed description</div>
+<div id="task-container">
+    {% for task in tasks %}
+        <div class="task-item" style="{{ task.technology|tech_background }}">
+            <div class="task-title">
+                <div class="task-technology-icon">
+                    {% if task.technology == 'python' %}
+                        <i class="fab fa-python"></i>
+                    {% elif task.technology == 'javascript' %}
+                        <i class="fab fa-js"></i>
+                    {% elif task.technology == 'css' %}
+                        <i class="fab fa-css3-alt"></i>
+                    {% elif task.technology == 'html' %}
+                        <i class="fab fa-html5"></i>
+                    {% elif task.technology == 'cpp' %}
+                        <i class="fas fa-code"></i>
+                    {% elif task.technology == 'c' %}
+                        <i class="fas fa-code"></i>
+                    {% elif task.technology == 'docker' %}
+                        <i class="fab fa-docker"></i>
+                    {% elif task.technology == 'git' %}
+                        <i class="fab fa-git-alt"></i>
+                    {% elif task.technology == 'react' %}
+                        <i class="fab fa-react"></i>
+                    {% elif task.technology == 'django' %}
+                        <i class="fab fa-python"></i>
+                    {% elif task.technology == 'php' %}
+                        <i class="fab fa-php"></i>
+                    {% elif task.technology == 'java' %}
+                        <i class="fab fa-java"></i>
+                    {% else %}
+                        <i class="fas fa-question"></i>
+                    {% endif %}
+                </div>
+                {% if task.is_completed %}
+                    <div class="task-complete-icon">&#10004;</div>
+                    <div><i><s><a style="color: gray" href="{% url 'task-update' task.id %}">{{ task }}</a></s></i></div>
+                {% else %}
+                    <div class="task-incomplete-icon"></div>
+                    <div><a href="{% url 'task-update' task.id %}">{{ task }}</a></div>
+                {% endif %}
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <div class="task-completion-time">Due to: {% if task.completion_date %}
+                {{ task.completion_date }}
+                    {% else %}
+                    No data
+                    {% endif %}
+                </div>
+                <div class="task-delete"><a href="{% url 'task-delete' task.id %}" style="color: red; font-size: 25px;">&#10006;</a></div>
+            </div>
+        </div>
     {% empty %}
-        <h3>Add your first task!</h3>
+        <h2>Add your first task!</h2>
     {% endfor %}
-</ul>
+</div>
 </body>
 </html>
+{% endblock content %}

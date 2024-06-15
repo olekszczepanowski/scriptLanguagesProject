@@ -7,7 +7,8 @@ class TaskForm(forms.ModelForm):
         widget=forms.DateInput(attrs={'type': 'date'}),
         required=False
     )
+    technology = forms.Select(choices=Task.TECHNOLOGY_CHOICES)
 
     class Meta:
         model = Task
-        fields = ['title', 'description', 'is_completed', 'completion_date']
+        fields = ['title', 'description', 'is_completed', 'completion_date', 'technology']

@@ -1,7 +1,54 @@
-<h1>Create ur task!</h1>
-<a href="{% url "tasks" %}">Return</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        form{
+            display: flex;
+            flex-direction: column;
+        }
+        #return{
+            text-decoration: none;
+            display: flex;
+            justify-content: flex-end;
+        }
+        #return:hover{
+            cursor: pointer;
+            color: red;
+        }
+        #submit{
+            border: none;
+            background: none;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #submit:hover{
+            color: #0b22ff;
+            cursor: pointer;
+            transform: scale(1.1);
+            transition-duration: 0.1s;
+        }
+    </style>
+</head>
+<body>
+{% extends 'todolist/index.html'%}
+{% block content %}
+<div style="background: #7F7FD5;
+            background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+            background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+            padding: 5px;">
+<a href="{% url "tasks" %}" id="return">Return</a>
+<h1 style="text-align: center">Create ur task!</h1>
+
 <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="submit">
+    <input id="submit" type="submit" value="Submit">
 </form>
+</div>
+{% endblock content %}
+</body>
+</html>
