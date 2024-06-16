@@ -5,14 +5,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Delete</title>
+    <style>
+        a{
+            text-decoration: none;
+            color: black;
+        }
+        a:hover{
+            color: #ff0000;
+        }
+    </style>
 </head>
 <body>
-<a href="{% url "tasks" %}">Return</a>
+<div class="header-bar"><a href="{% url "tasks" %}">Return</a></div>
+<div style="padding: 5px">
 <form method="post">{% csrf_token %}
     <p>Are you sure you want to delete "{{ task }}"?</p>
     {{ form }}
     <input type="submit" value="Confirm">
 </form>
+</div>
 </body>
 </html>
 {% endblock content %}

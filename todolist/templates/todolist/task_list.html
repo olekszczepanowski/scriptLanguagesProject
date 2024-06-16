@@ -20,7 +20,7 @@
         #logout-btn{
             background: none;
             border: none;
-            padding: 1%
+            padding: 1%;
         }
         #logout-btn:hover{
             cursor: pointer;
@@ -78,10 +78,12 @@
             cursor: pointer;
             transform: scale(1.1);
             transition-duration: 0.1s;
+            color:red;
         }
         .task-technology-icon{
             margin-right: 5px;
             font-size: 25px;
+            width: 30px;
         }
         .task-completion-time{
             padding: 5px;
@@ -113,7 +115,7 @@
 <div id="add-task">
     <a href="{% url 'task-create' %}">Add your task!</a>
 </div>
-<div style="display: flex; justify-content: center;">Click on task to see the detailed description</div>
+<div style="display: flex; justify-content: center;">Click on task title to see detailed description</div>
 <div id="task-container">
     {% for task in tasks %}
         <div class="task-item" style="{{ task.technology|tech_background }}">
@@ -166,7 +168,7 @@
             </div>
         </div>
     {% empty %}
-        <h2>Add your first task!</h2>
+        <h2 style="padding: 5px; text-align: center">Add your first task!</h2>
     {% endfor %}
 </div>
 </body>

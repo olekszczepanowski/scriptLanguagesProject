@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
+        body{
+        }
         form{
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            padding: 5px;
         }
         #return{
             text-decoration: none;
@@ -36,13 +40,14 @@
 <body>
 {% extends 'todolist/index.html'%}
 {% block content %}
-<div style="background: #7F7FD5;
-            background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+<div>
+<div style="background: #7F7FD5;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);  /* Chrome 10-25, Safari 5.1-6 */
             background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
-            padding: 5px;">
-<a href="{% url "tasks" %}" id="return">Return</a>
+padding-bottom: 20px">
+<a href="{% url "tasks" %}" id="return" style="padding: 1%">Return</a>
 <h1 style="text-align: center">Create ur task!</h1>
-
+</div>
 <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}

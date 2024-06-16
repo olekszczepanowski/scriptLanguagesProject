@@ -20,7 +20,7 @@ class Task(models.Model):
         ('other', 'Other')
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=40)
     description = models.TextField(null=True, blank=True)
     is_completed = models.BooleanField(default=False)
     completion_date = models.DateField(null=True, blank=True)
